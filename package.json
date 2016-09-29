@@ -1,0 +1,38 @@
+{
+  "name": "octokit.node",
+  "version": "1.0.0",
+  "description": "Git",
+  "main": "./lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "prepublish": "make build"
+  },
+  "dependencies": {
+    "httpx": "^2.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-preset-stage-1": "^6.5.0",
+    "co-mocha": "~1.1.3",
+    "expect.js": "~0.3.1",
+    "mocha": "~3.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JacksonTian/octokit.node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JacksonTian/octokit.node/issues"
+  },
+  "homepage": "https://github.com/JacksonTian/octokit.node#readme",
+  "files": [
+    "lib/*.js"
+  ]
+}

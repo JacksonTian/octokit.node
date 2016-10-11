@@ -31,7 +31,7 @@ class Octokit {
     if (res.statusCode !== 200) {
 
     }
-    console.log(res.headers);
+
     var body = await httpx.read(res, 'utf8');
 
     if (res.headers['content-type'].indexOf('application/json') !== -1) {
@@ -116,6 +116,19 @@ class Octokit {
   async deleteRepository(owner, repo) {
     // see https://developer.github.com/v3/repos/#delete-a-repository
     return await this.delete(`/repos/${owner}/${repo}`);
+  }
+
+  async getCommitActivityStats(owner, repo) {
+    return await this.get(`/repos/${owner}/${repo}/stats/commit_activity`);
+  }
+
+  async getContributorsStats(owner, repo) {
+    return await this.get(`/repos/${owner}/${repo}/stats/contributors`);
+  }
+
+  // GET /repos/:owner/:repo/stats/punch_card
+  async getPunchCardStats(owner, repo) {
+    return await this.get(`/repos/${owner}/${repo}/stats/punch_card`);
   }
 }
 

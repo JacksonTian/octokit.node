@@ -1,5 +1,6 @@
 'use strict';
 
+const querystring = require('querystring');
 const httpx = require('httpx');
 
 class Octokit {
@@ -28,14 +29,28 @@ class Octokit {
       data: data
     });
 
-    if (res.statusCode !== 200) {
-
-    }
-
     var body = await httpx.read(res, 'utf8');
 
-    if (res.headers['content-type'].indexOf('application/json') !== -1) {
-      return JSON.parse(body);
+    var contentType = res.headers['content-type'] || '';
+    var parsed;
+    if (contentType.indexOf('application/json') !== -1) {
+      parsed = JSON.parse(body);
+    }
+
+    var code = res.statusCode;
+    if (code >= 400) {
+      var err = new Error();
+      err.name = 'Github' + err.name;
+      if (parsed) {
+        err.message = parsed.message;
+        if (parsed.documentation_url) {
+          err.message += `documentation url: ${parsed.documentation_url}`;
+        }
+      } else {
+        err.message = body;
+      }
+
+      throw err;
     }
 
     return body;

@@ -3,6 +3,22 @@
 const querystring = require('querystring');
 const httpx = require('httpx');
 
+const patt = /<([^>]*)>; rel="([^"]*)"/;
+
+var parseLinks = function (link) {
+  var parts = link.split(',');
+  var links = {};
+
+  for (var i = 0; i < parts.length; i++) {
+    var part = parts[i];
+    var matched = part.match(patt);
+    if (matched) {
+      links[matched[2]] = matched[1];
+    }
+  }
+  return links;
+};
+
 class Octokit {
   constructor(user, token) {
     this.endpoint = 'https://api.github.com';
@@ -53,7 +69,12 @@ class Octokit {
       throw err;
     }
 
-    return body;
+    var link = res.headers.link;
+    if (link) {
+      parsed.links = parseLinks(link);
+    }
+
+    return parsed || body;
   }
 
   async get(path, query) {

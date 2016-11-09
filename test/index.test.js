@@ -1,6 +1,7 @@
 'use strict';
 
 const expect = require('expect.js');
+// readonly token
 const token = 'da7a7e990db5c2c635ab9a0706cb09eb3d792724';
 const Octokit = require('../');
 

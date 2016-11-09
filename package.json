@@ -1,7 +1,7 @@
 {
   "name": "octokit.node",
-  "version": "1.1.0",
-  "description": "Git",
+  "version": "1.1.2",
+  "description": "GitHub API SDK",
   "main": "./lib/index.js",
   "directories": {
     "test": "test"

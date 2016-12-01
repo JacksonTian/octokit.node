@@ -60,4 +60,60 @@ describe('repositories', function () {
     expect(tags).to.be.ok();
     expect(tags).to.be.an(Array);
   });
+
+  xit('List referrers should ok', function* () {
+    var owner = 'ant-design';
+    var repo = 'ant-design';
+    var path = `/repos/${owner}/${repo}/traffic/popular/referrers`;
+    var referrers = yield octokit.get(path, {
+      headers: {
+        'accept': 'application/vnd.github.spiderman-preview'
+      }
+    });
+    expect(referrers).to.be.ok();
+    expect(referrers).to.be.an(Array);
+  });
+
+  xit('List paths should ok', function* () {
+    var owner = 'alibaba';
+    var repo = 'weex';
+    var path = `/repos/${owner}/${repo}/traffic/popular/paths`;
+    var paths = yield octokit.get(path, {
+      headers: {
+        'accept': 'application/vnd.github.spiderman-preview'
+      }
+    });
+    expect(paths).to.be.ok();
+    expect(paths).to.be.an(Array);
+  });
+
+  it(`Get the contents of a repository's license should ok`, function* () {
+    var owner = 'alibaba';
+    var repo = 'weex';
+    var path = `/repos/${owner}/${repo}/license`;
+    var result = yield octokit.get(path, {
+      headers: {
+        //'accept': 'application/vnd.github.spiderman-preview'
+      }
+    });
+    expect(result).to.be.ok();
+    expect(result.license).to.be.ok();
+    var license = result.license;
+    expect(license.name).to.be('Apache License 2.0');
+  });
+
+  it(`Get a repository's license should ok`, function* () {
+    var owner = 'alibaba';
+    var repo = 'weex';
+    var path = `/repos/${owner}/${repo}`;
+    var result = yield octokit.get(path, {
+      headers: {
+        'accept': 'application/vnd.github.drax-preview+json'
+      }
+    });
+    expect(result).to.be.ok();
+    expect(result.license).to.be.ok();
+    var license = result.license;
+    expect(license.name).to.be('Apache License 2.0');
+  });
 });

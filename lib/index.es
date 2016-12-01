@@ -19,37 +19,34 @@ var parseLinks = function (link) {
   return links;
 };
 
-class Octokit {
+class Base {
   constructor(user, token) {
     this.endpoint = 'https://api.github.com';
     this.user = user;
     this.token = token;
-    this.auth = new Buffer(`${user}:${token}`, 'utf8').toString('base64');
+    this.auth = Buffer.from(`${user}:${token}`, 'utf8').toString('base64');
   }
 
-  async request(method, path, query, data) {
+  async request(method, path, opts) {
+    opts || (opts = {});
     var url = this.endpoint + path;
-
-    if (query) {
-      url += '?' + querystring.stringify(query);
-    }
 
     var res = await httpx.request(url, {
       method: method,
       timeout: 10000,
-      headers: {
+      headers: Object.assign({
         'accept': 'application/vnd.github.v3+json',
         'user-agent': 'octokit.node',
         'authorization': `Basic ${this.auth}`
-      },
-      data: data
+      }, opts.headers),
+      data: opts.data
     });
 
     var body = await httpx.read(res, 'utf8');
 
     var contentType = res.headers['content-type'] || '';
     var parsed;
-    if (contentType.indexOf('application/json') !== -1) {
+    if (contentType.includes('application/json')) {
       parsed = JSON.parse(body);
     }
 
@@ -77,46 +74,71 @@ class Octokit {
     return parsed || body;
   }
 
-  async get(path, query) {
-    return await this.request('GET', path, query);
+  async get(path, opts) {
+    opts || (opts = {});
+
+    if (opts && opts.data) {
+      path += '?' + querystring.stringify(opts.data);
+      opts.data = null;
+    }
+
+    return await this.request('GET', path, opts);
   }
 
-  async post(path, data) {
-    return await this.request('POST', path, null, data);
+  async post(path, opts) {
+    return await this.request('POST', path, opts);
   }
 
-  async patch(path, data) {
-    return await this.request('PATCH', path, null, data);
+  async patch(path, opts) {
+    return await this.request('PATCH', path, opts);
   }
 
-  async delete(path) {
-    return await this.request('DELETE', path);
+  async delete(path, opts) {
+    return await this.request('DELETE', path, opts);
+  }
+}
+
+class Octokit extends Base {
+  constructor(user, token) {
+    super(user, token);
   }
 
   async getYourRepositories(query) {
-    return await this.get('/user/repos', query);
+    return await this.get('/user/repos', {
+      data: query
+    });
   }
 
   async getUserRepositories(username, query) {
-    return await this.get(`/users/${username}/repos`, query);
+    return await this.get(`/users/${username}/repos`, {
+      data: query
+    });
   }
 
   async getOrganizationRepositories(org, query) {
-    return await this.get(`/orgs/${org}/repos`, query);
+    return await this.get(`/orgs/${org}/repos`, {
+      data: query
+    });
   }
 
   async getAllPublicRepositories(query) {
-    return await this.get(`/repositories`, query);
+    return await this.get(`/repositories`, {
+      data: query
+    });
   }
 
   async createYourRepository(data) {
     // see https://developer.github.com/v3/repos/#create
-    return await this.post(`/user/repos`, data);
+    return await this.post(`/user/repos`, {
+      data
+    });
   }
 
   async createOrgRepository(org, data) {
     // see https://developer.github.com/v3/repos/#create
-    return await this.post(`/orgs/:org/repos`, data);
+    return await this.post(`/orgs/:org/repos`, {
+      data
+    });
   }
 
   async getRepository(owner, repo) {
@@ -126,12 +148,16 @@ class Octokit {
 
   async updateRepository(owner, repo, data) {
     // see https://developer.github.com/v3/repos/#edit
-    return await this.patch(`/repos/${owner}/${repo}`, data);
+    return await this.patch(`/repos/${owner}/${repo}`, {
+      data
+    });
   }
 
   async getContributors(owner, repo, query) {
     // see https://developer.github.com/v3/repos/#list-contributors
-    return await this.get(`/repos/${owner}/${repo}/contributors`, query);
+    return await this.get(`/repos/${owner}/${repo}/contributors`, {
+      data: query
+    });
   }
 
   async getLanguages(owner, repo) {

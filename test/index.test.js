@@ -8,64 +8,64 @@ const Octokit = require('../');
 describe('repositories', function () {
   var octokit = new Octokit('JacksonTian', token);
 
-  it('List your repositories should ok', function* () {
-    var repositories = yield octokit.getYourRepositories();
+  it('List your repositories should ok', async function () {
+    var repositories = await octokit.getYourRepositories();
     expect(repositories).to.be.an(Array);
     expect(repositories.length).to.be.above(10);
     expect(repositories).to.have.property('links');
   });
 
-  it('List user repositories should ok', function* () {
+  it('List user repositories should ok', async function () {
     var user = 'JacksonTian';
-    var repositories = yield octokit.getUserRepositories(user);
+    var repositories = await octokit.getUserRepositories(user);
     expect(repositories).to.be.an(Array);
     expect(repositories.length).to.be.above(10);
     expect(repositories).to.have.property('links');
   });
 
-  it('List organization repositories should ok', function* () {
+  it('List organization repositories should ok', async function () {
     var org = 'alibaba';
-    var repositories = yield octokit.getOrganizationRepositories(org);
+    var repositories = await octokit.getOrganizationRepositories(org);
     expect(repositories).to.be.an(Array);
     expect(repositories.length).to.be.above(10);
     expect(repositories).to.have.property('links');
   });
 
-  it('List all public repositories should ok', function* () {
-    var repositories = yield octokit.getAllPublicRepositories();
+  it('List all public repositories should ok', async function () {
+    var repositories = await octokit.getAllPublicRepositories();
     expect(repositories).to.be.an(Array);
     expect(repositories.length).to.be.above(10);
     expect(repositories).to.have.property('links');
   });
 
-  it('Get repository should ok', function* () {
-    var repo = yield octokit.getRepository('JacksonTian', 'eventproxy');
+  it('Get repository should ok', async function () {
+    var repo = await octokit.getRepository('JacksonTian', 'eventproxy');
     expect(repo.name).to.be('eventproxy');
   });
 
-  it('List contributors should ok', function* () {
-    var contributors = yield octokit.getContributors('JacksonTian', 'eventproxy');
+  it('List contributors should ok', async function () {
+    var contributors = await octokit.getContributors('JacksonTian', 'eventproxy');
     expect(contributors).to.be.an(Array);
     expect(contributors.length).to.be.above(10);
   });
 
-  it('List languages should ok', function* () {
-    var languages = yield octokit.getLanguages('JacksonTian', 'eventproxy');
+  it('List languages should ok', async function () {
+    var languages = await octokit.getLanguages('JacksonTian', 'eventproxy');
     expect(languages).to.be.ok();
     expect(languages).to.have.keys('JavaScript', 'HTML', 'CSS', 'Makefile');
   });
 
-  it('List tags should ok', function* () {
-    var tags = yield octokit.getTags('JacksonTian', 'eventproxy');
+  it('List tags should ok', async function () {
+    var tags = await octokit.getTags('JacksonTian', 'eventproxy');
     expect(tags).to.be.ok();
     expect(tags).to.be.an(Array);
   });
 
-  xit('List referrers should ok', function* () {
+  xit('List referrers should ok', async function () {
     var owner = 'ant-design';
     var repo = 'ant-design';
     var path = `/repos/${owner}/${repo}/traffic/popular/referrers`;
-    var referrers = yield octokit.get(path, {
+    var referrers = await octokit.get(path, {
       headers: {
         'accept': 'application/vnd.github.spiderman-preview'
       }
@@ -74,11 +74,11 @@ describe('repositories', function () {
     expect(referrers).to.be.an(Array);
   });
 
-  xit('List paths should ok', function* () {
+  xit('List paths should ok', async function () {
     var owner = 'alibaba';
     var repo = 'weex';
     var path = `/repos/${owner}/${repo}/traffic/popular/paths`;
-    var paths = yield octokit.get(path, {
+    var paths = await octokit.get(path, {
       headers: {
         'accept': 'application/vnd.github.spiderman-preview'
       }
@@ -87,11 +87,11 @@ describe('repositories', function () {
     expect(paths).to.be.an(Array);
   });
 
-  it(`Get the contents of a repository's license should ok`, function* () {
+  it(`Get the contents of a repository's license should ok`, async function () {
     var owner = 'alibaba';
-    var repo = 'weex';
+    var repo = 'pouch';
     var path = `/repos/${owner}/${repo}/license`;
-    var result = yield octokit.get(path, {
+    var result = await octokit.get(path, {
       headers: {
         //'accept': 'application/vnd.github.spiderman-preview'
       }
@@ -102,11 +102,11 @@ describe('repositories', function () {
     expect(license.name).to.be('Apache License 2.0');
   });
 
-  it(`Get a repository's license should ok`, function* () {
+  it(`Get a repository's license should ok`, async function () {
     var owner = 'alibaba';
-    var repo = 'weex';
+    var repo = 'pouch';
     var path = `/repos/${owner}/${repo}`;
-    var result = yield octokit.get(path, {
+    var result = await octokit.get(path, {
       headers: {
         'accept': 'application/vnd.github.drax-preview+json'
       }

@@ -74,7 +74,7 @@ class Base {
     return parsed || body;
   }
 
-  async get(path, opts) {
+  get(path, opts) {
     opts || (opts = {});
 
     if (opts && opts.data) {
@@ -82,19 +82,19 @@ class Base {
       opts.data = null;
     }
 
-    return await this.request('GET', path, opts);
+    return this.request('GET', path, opts);
   }
 
-  async post(path, opts) {
-    return await this.request('POST', path, opts);
+  post(path, opts) {
+    return this.request('POST', path, opts);
   }
 
-  async patch(path, opts) {
-    return await this.request('PATCH', path, opts);
+  patch(path, opts) {
+    return this.request('PATCH', path, opts);
   }
 
-  async delete(path, opts) {
-    return await this.request('DELETE', path, opts);
+  delete(path, opts) {
+    return this.request('DELETE', path, opts);
   }
 }
 
@@ -103,94 +103,94 @@ class Octokit extends Base {
     super(user, token);
   }
 
-  async getYourRepositories(query) {
-    return await this.get('/user/repos', {
+  getYourRepositories(query) {
+    return this.get('/user/repos', {
       data: query
     });
   }
 
-  async getUserRepositories(username, query) {
-    return await this.get(`/users/${username}/repos`, {
+  getUserRepositories(username, query) {
+    return this.get(`/users/${username}/repos`, {
       data: query
     });
   }
 
-  async getOrganizationRepositories(org, query) {
-    return await this.get(`/orgs/${org}/repos`, {
+  getOrganizationRepositories(org, query) {
+    return this.get(`/orgs/${org}/repos`, {
       data: query
     });
   }
 
-  async getAllPublicRepositories(query) {
-    return await this.get(`/repositories`, {
+  getAllPublicRepositories(query) {
+    return this.get(`/repositories`, {
       data: query
     });
   }
 
-  async createYourRepository(data) {
+  createYourRepository(data) {
     // see https://developer.github.com/v3/repos/#create
-    return await this.post(`/user/repos`, {
+    return this.post(`/user/repos`, {
       data
     });
   }
 
-  async createOrgRepository(org, data) {
+  createOrgRepository(org, data) {
     // see https://developer.github.com/v3/repos/#create
-    return await this.post(`/orgs/:org/repos`, {
+    return this.post(`/orgs/:org/repos`, {
       data
     });
   }
 
-  async getRepository(owner, repo) {
+  getRepository(owner, repo) {
     // see https://developer.github.com/v3/repos/#get
-    return await this.get(`/repos/${owner}/${repo}`);
+    return this.get(`/repos/${owner}/${repo}`);
   }
 
-  async updateRepository(owner, repo, data) {
+  updateRepository(owner, repo, data) {
     // see https://developer.github.com/v3/repos/#edit
-    return await this.patch(`/repos/${owner}/${repo}`, {
+    return this.patch(`/repos/${owner}/${repo}`, {
       data
     });
   }
 
-  async getContributors(owner, repo, query) {
+  getContributors(owner, repo, query) {
     // see https://developer.github.com/v3/repos/#list-contributors
-    return await this.get(`/repos/${owner}/${repo}/contributors`, {
+    return this.get(`/repos/${owner}/${repo}/contributors`, {
       data: query
     });
   }
 
-  async getLanguages(owner, repo) {
+  getLanguages(owner, repo) {
     // see https://developer.github.com/v3/repos/#list-languages
-    return await this.get(`/repos/${owner}/${repo}/languages`);
+    return this.get(`/repos/${owner}/${repo}/languages`);
   }
 
-  async getTeams(owner, repo) {
+  getTeams(owner, repo) {
     // see https://developer.github.com/v3/repos/#list-teams
-    return await this.get(`/repos/${owner}/${repo}/teams`);
+    return this.get(`/repos/${owner}/${repo}/teams`);
   }
 
-  async getTags(owner, repo) {
+  getTags(owner, repo) {
     // see https://developer.github.com/v3/repos/#list-tags
-    return await this.get(`/repos/${owner}/${repo}/tags`);
+    return this.get(`/repos/${owner}/${repo}/tags`);
   }
 
-  async deleteRepository(owner, repo) {
+  deleteRepository(owner, repo) {
     // see https://developer.github.com/v3/repos/#delete-a-repository
-    return await this.delete(`/repos/${owner}/${repo}`);
+    return this.delete(`/repos/${owner}/${repo}`);
   }
 
-  async getCommitActivityStats(owner, repo) {
-    return await this.get(`/repos/${owner}/${repo}/stats/commit_activity`);
+  getCommitActivityStats(owner, repo) {
+    return this.get(`/repos/${owner}/${repo}/stats/commit_activity`);
   }
 
-  async getContributorsStats(owner, repo) {
-    return await this.get(`/repos/${owner}/${repo}/stats/contributors`);
+  getContributorsStats(owner, repo) {
+    return this.get(`/repos/${owner}/${repo}/stats/contributors`);
   }
 
   // GET /repos/:owner/:repo/stats/punch_card
-  async getPunchCardStats(owner, repo) {
-    return await this.get(`/repos/${owner}/${repo}/stats/punch_card`);
+  getPunchCardStats(owner, repo) {
+    return this.get(`/repos/${owner}/${repo}/stats/punch_card`);
   }
 }
 

@@ -21,7 +21,6 @@ build: ${OBJ}
 test: build
 	@NODE_ENV=test ./node_modules/.bin/mocha \
 		--reporter $(REPORTER) \
-		--require co-mocha \
 		--timeout $(TIMEOUT) \
 		$(MOCHA_OPTS) \
 		$(TESTS)
@@ -31,7 +30,6 @@ test-cov: build
 		node_modules/.bin/istanbul cover --report html \
 		./node_modules/.bin/_mocha -- \
 		--reporter $(REPORTER) \
-		--require co-mocha \
 		--timeout $(TIMEOUT) \
 		$(MOCHA_OPTS) \
 		$(TESTS)
